@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Für Adri: Dein Jarvis</title>
+<link rel="apple-touch-icon" href="app/icon-180.png">
+<link rel="icon" type="image/png" href="app/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: ein persönlicher Brief an Adri – oben Begrüßung + Jarvis' Job, dann EIN großer Knopf, darunter die Schritte fürs gewählte Gerät */
+  --wall:#2a1638;
+  --paper:#fff6e6;
+  --ink:#2a1638;
+  --pink:#ff4fa3;
+  --mint:#3fe0c5;
+  --sun:#ffd23f;
+  --soft:#cdb8dc;
+  --f-display:"Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--wall);color:var(--paper);font:400 16px/1.55 var(--f-body);
+  background-image:radial-gradient(circle at 15% 5%,rgba(255,79,163,.18),transparent 40%),radial-gradient(circle at 90% 95%,rgba(63,224,197,.12),transparent 40%)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px;
+  padding:max(28px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(40px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
+.hello{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.hello img{width:84px;height:84px;border-radius:20px;box-shadow:4px 4px 0 var(--pink)}
+.kicker{font-weight:800;color:var(--sun);font-size:14px;letter-spacing:.5px}
+h1{margin:2px 0 0;font:400 clamp(34px,8vw,52px)/1.05 var(--f-display);text-shadow:3px 3px 0 var(--pink);text-wrap:balance}
+.lead{font-size:18px;max-width:60ch;margin:0}
+.job{background:var(--paper);color:var(--ink);border-radius:10px;padding:18px 20px;box-shadow:4px 4px 0 rgba(0,0,0,.35);position:relative}
+.job:before{content:"";position:absolute;top:-9px;left:50%;width:56px;height:18px;margin-left:-28px;background:rgba(63,224,197,.8);transform:rotate(-3deg)}
+.job h2{margin:0 0 10px;font:400 22px var(--f-display);color:var(--pink)}
+.job ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.job li{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:start}
+.job li b{display:block}
+.job .ic{font-size:20px;line-height:1.2}
+.promise{margin:12px 0 0;font-size:14.5px;opacity:.8}
+.cta{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.go{display:inline-flex;align-items:center;gap:10px;text-decoration:none;background:var(--sun);color:var(--ink);font:400 22px var(--f-display);
+  padding:16px 26px;border-radius:16px;box-shadow:5px 5px 0 var(--pink);min-height:56px}
+.go:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--pink)}
+.cta small{color:var(--soft)}
+.dev{display:flex;gap:8px;flex-wrap:wrap}
+.dev button{font:800 15px var(--f-body);border:2px solid var(--soft);background:transparent;color:var(--paper);border-radius:999px;padding:9px 16px;cursor:pointer;min-height:44px}
+.dev button[aria-pressed="true"]{background:var(--pink);border-color:var(--pink)}
+.steps{display:grid;gap:14px;counter-reset:s;margin:0;padding:0;list-style:none}
+.steps[hidden]{display:none}
+.step{background:rgba(255,246,230,.06);border:2px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 16px 14px 62px;position:relative}
+.step:before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:12px;width:34px;height:34px;border-radius:50%;
+  background:var(--mint);color:var(--ink);font:400 18px/34px var(--f-display);text-align:center}
+.step h3{margin:0 0 6px;font:800 17px var(--f-body)}
+.step ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.step .tip{margin-top:8px;font-size:14px;color:var(--sun)}
+.key{display:inline-block;background:var(--paper);color:var(--ink);border-radius:6px;padding:0 6px;font-weight:800}
+.dl{display:flex;flex-direction:column;gap:12px}
+.dl h2{margin:0;font:400 26px var(--f-display)}
+.dl-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.go{border:0;cursor:pointer;justify-content:center}
+.go[aria-pressed="true"]{background:var(--pink);color:#fff;box-shadow:5px 5px 0 var(--sun)}
+.dl small{color:var(--soft)}
+.open{align-self:flex-start;display:inline-flex;text-decoration:none;background:var(--pink);color:#fff;font:400 20px var(--f-display);padding:14px 22px;border-radius:14px;box-shadow:4px 4px 0 var(--sun)}
+.open[hidden]{display:none}
+@media (max-width:420px){.dl-btns{grid-template-columns:1fr}}
+.done{background:var(--paper);color:var(--ink);border-radius:12px;padding:16px 18px}
+.done h2{margin:0 0 6px;font:400 20px var(--f-display);color:var(--pink)}
+.done p{margin:0}
+.foot{color:var(--soft);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hello">
+    <img src="app/icon-180.png" alt="Jarvis-Symbol">
+    <div>
+      <div class="kicker">Nur für dich, Adri ✨</div>
+      <h1>Das ist dein Jarvis</h1>
+    </div>
+  </section>
+  <p class="lead">Max hat dir einen eigenen Assistenten gebaut. Er kennt adri.chaos, die Stammtischbande und Casa Adriana, und er hat einen klaren Job:</p>
+
+  <section class="job" aria-labelledby="jobT">
+    <h2 id="jobT">Sein Job</h2>
+    <ul>
+      <li><span class="ic">🧭</span><span><b>Dein Chaos sortieren</b>Du schreibst alles rein, durcheinander ist okay. Er macht Ordnung draus.</span></li>
+      <li><span class="ic">🎯</span><span><b>Dir immer nur den nächsten Schritt geben</b>Einen kleinen, unter 10 Minuten. Mit Timer und „Geschafft“-Knopf.</span></li>
+      <li><span class="ic">🅿️</span><span><b>Den Rest parken</b>Was gerade nicht dran ist, landet auf deinem Gedanken-Parkplatz. Nichts geht verloren.</span></li>
+      <li><span class="ic">📅</span><span><b>Deinen Tag planen</b>Ein Hauptziel, höchstens drei Aufgaben, Pausen inklusive.</span></li>
+      <li><span class="ic">💡</span><span><b>Dich beraten</b>Content-Ideen, Captions, Shop-Texte und eine klare Empfehlung, wenn du dich entscheiden musst.</span></li>
+    </ul>
+    <p class="promise">Alles, was du ihm erzählst, bleibt auf deinem Gerät. Er gehört dir.</p>
+  </section>
+
+  <section class="dl" aria-labelledby="dlT">
+    <h2 id="dlT">Hol dir deinen Jarvis</h2>
+    <div class="dl-btns" role="group" aria-label="Für welches Gerät?">
+      <button type="button" class="go" data-dev="mac" aria-pressed="false">💻 Für MacBook</button>
+      <button type="button" class="go" data-dev="iphone" aria-pressed="false">📱 Für iPhone</button>
+    </div>
+    <small id="dlHint">Tipp auf dein Gerät, dann zeige ich dir die Schritte.</small>
+  </section>
+
+  <a class="open" id="open" href="app/" hidden>✨ Jarvis öffnen</a>
+
+  <ol class="steps" id="steps-iphone" hidden>
+    <li class="step"><h3>Diese Seite in Safari öffnen</h3><ul>
+      <li>Der blaue Kompass auf deinem iPhone.</li>
+      <li>Bist du gerade in WhatsApp oder Instagram? Dann oben rechts auf die drei Punkte und „In Safari öffnen“.</li></ul></li>
+    <li class="step"><h3>Auf „Jarvis öffnen“ tippen</h3><ul>
+      <li>Der rosa Knopf direkt über diesen Schritten.</li>
+      <li>Jarvis begrüßt dich mit „Hey Adri, kurz einrichten“.</li></ul></li>
+    <li class="step"><h3>Als App auf den Home-Bildschirm legen</h3><ul>
+      <li>Unten auf das Teilen-Symbol tippen (Viereck mit Pfeil nach oben).</li>
+      <li>Nach unten wischen und <span class="key">Zum Home-Bildschirm</span> antippen.</li>
+      <li>Oben rechts <span class="key">Hinzufügen</span> tippen.</li></ul>
+      <div class="tip">Ab jetzt ist Jarvis ein Symbol auf deinem Home-Bildschirm. Öffne ihn immer dort.</div></li>
+    <li class="step"><h3>Deinen kostenlosen Schlüssel holen</h3><ul>
+      <li>Öffne Jarvis über das neue Symbol.</li>
+      <li>Tipp auf den rosa Link <b>aistudio.google.com/apikey</b> und melde dich mit deinem Google-Konto an.</li>
+      <li>Tipp auf <span class="key">API-Schlüssel erstellen</span> (oder „Create API key“) und dann auf „Kopieren“.</li></ul></li>
+    <li class="step"><h3>Schlüssel in Jarvis einsetzen</h3><ul>
+      <li>Zurück zu Jarvis, ins Feld „Dein Gemini-Schlüssel“ tippen und lange drücken, dann „Einsetzen“.</li>
+      <li>Auf <span class="key">Testen &amp; speichern</span> tippen.</li>
+      <li>Steht da „Klappt! ✨“? Dann bist du fertig.</li></ul></li>
+  </ol>
+
+  <ol class="steps" id="steps-mac" hidden>
+    <li class="step"><h3>Diese Seite in Safari öffnen</h3><ul>
+      <li>Safari ist der blaue Kompass im Dock.</li>
+      <li>Kopier den Link aus deiner Nachricht und füg ihn oben in Safari ein.</li></ul></li>
+    <li class="step"><h3>Auf „Jarvis öffnen“ klicken</h3><ul>
+      <li>Der rosa Knopf direkt über diesen Schritten. Jarvis öffnet sich in einem neuen Tab.</li></ul></li>
+    <li class="step"><h3>Jarvis ins Dock legen</h3><ul>
+      <li>Oben in der Menüleiste auf <span class="key">Ablage</span> klicken.</li>
+      <li>Dann <span class="key">Zum Dock hinzufügen</span> und <span class="key">Hinzufügen</span>.</li></ul>
+      <div class="tip">Jetzt ist Jarvis unten im Dock, wie eine richtige App. Öffne ihn immer dort.</div></li>
+    <li class="step"><h3>Deinen kostenlosen Schlüssel holen</h3><ul>
+      <li>Öffne Jarvis über das Dock.</li>
+      <li>Klick auf den rosa Link <b>aistudio.google.com/apikey</b> und melde dich mit deinem Google-Konto an.</li>
+      <li>Hast du am iPhone schon einen erstellt? Dann siehst du ihn dort und klickst nur auf „Kopieren“.</li>
+      <li>Sonst <span class="key">API-Schlüssel erstellen</span> klicken und kopieren.</li></ul></li>
+    <li class="step"><h3>Schlüssel in Jarvis einsetzen</h3><ul>
+      <li>Ins Feld „Dein Gemini-Schlüssel“ klicken und mit <span class="key">⌘ + V</span> einfügen.</li>
+      <li>Auf <span class="key">Testen &amp; speichern</span> klicken. Bei „Klappt! ✨“ bist du fertig.</li>
+      <li>Gut zu wissen: Mac und iPhone merken sich alles getrennt.</li></ul></li>
+  </ol>
+
+  <section class="done">
+    <h2>Und dann?</h2>
+    <p>Tipp auf <b>🧭 Sortier mich</b> und schreib Jarvis, was dir gerade im Kopf herumschwirrt. Er macht den Rest. Wenn etwas hakt: Screenshot an Max.</p>
+  </section>
+
+  <p class="foot">Diese Seite ist nur über deinen Link erreichbar und taucht in keiner Suchmaschine auf.</p>
+</main>
+<script>
+const btns=document.querySelectorAll(".dl .go"), open=document.getElementById("open");
+function zeige(d){btns.forEach(b=>b.setAttribute("aria-pressed",b.dataset.dev===d));
+  document.getElementById("steps-iphone").hidden=d!=="iphone";document.getElementById("steps-mac").hidden=d!=="mac";
+  open.hidden=false;
+  if(d==="mac"){open.target="_blank";open.rel="noopener"}else{open.removeAttribute("target")}
+  document.getElementById("dlHint").textContent=d==="mac"?"Mach die 5 Schritte unten am MacBook, in Safari.":"Mach die 5 Schritte unten am iPhone, in Safari.";
+  open.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})}
+btns.forEach(b=>b.onclick=()=>zeige(b.dataset.dev));
+</script>
+</body>
+</html>
