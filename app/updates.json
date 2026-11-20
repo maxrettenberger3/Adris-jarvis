@@ -6,7 +6,29 @@
       "datum": "19.11.2026",
       "titel": "Dein erster Jarvis",
       "von": "Max",
-      "neu": ["Sortier mich, Mein Tag, Content und Casa Adriana", "Gedanken-Parkplatz, Jetzt-dran-Timer und Geschafft-Zähler"]
+      "neu": [
+        "Sortier mich, Mein Tag, Content und Casa Adriana",
+        "Gedanken-Parkplatz, Jetzt-dran-Timer und Geschafft-Zähler"
+      ]
+    },
+    {
+      "v": 2,
+      "datum": "21.11.2026",
+      "titel": "Deine Formulierung",
+      "von": "Max (auf deinen Wunsch)",
+      "dauer": "sofort",
+      "neu": [
+        "Jarvis' Beschreibung von dir ist jetzt genau so formuliert, wie du es dir gewünscht hast."
+      ],
+      "vorteile": [
+        "Jarvis beschreibt dich so, wie du es möchtest."
+      ],
+      "nachteile": [
+        "Keine – Jarvis arbeitet genauso strukturiert wie vorher."
+      ],
+      "bleibt": [
+        "Alle Modi, dein Gedanken-Parkplatz, dein Verlauf, dein Schlüssel und Jarvis' feste Struktur."
+      ]
     }
   ]
 }

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adris Jarvis</title>
+<meta name="theme-color" content="#2a1638">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Jarvis">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  /* Layout: Zimmerstudio bei Nacht. Links "Jetzt dran" + Gedanken-Parkplatz (immer sichtbar), rechts die Antworten als geordnete Karten */
+  --wall:#2a1638;
+  --wall2:#3a1f4d;
+  --paper:#fff6e6;
+  --ink:#2a1638;
+  --pink:#ff4fa3;
+  --mint:#3fe0c5;
+  --sun:#ffd23f;
+  --soft:#cdb8dc;
+  --ok:#2fbf71;
+  --f-display:"Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--wall);color:var(--paper);font:400 15px/1.5 var(--f-body);
+  background-image:radial-gradient(circle at 12% 8%,rgba(255,79,163,.16),transparent 38%),radial-gradient(circle at 88% 92%,rgba(63,224,197,.12),transparent 40%)}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.sr{position:absolute;left:-9999px}
+.wrap{max-width:1200px;margin:0 auto;padding:18px max(16px,3vw) 28px;display:flex;flex-direction:column;gap:16px;min-height:100%}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{font:400 34px/1 var(--f-display);color:var(--paper);text-shadow:3px 3px 0 var(--pink)}
+.logo span{color:var(--sun);text-shadow:3px 3px 0 var(--ink)}
+.demo{background:var(--sun);color:var(--ink);font-weight:800;font-size:12px;padding:4px 10px;border-radius:999px;transform:rotate(-3deg)}
+.today{margin-left:auto;font-weight:700;font-size:13px;color:var(--soft);text-align:right}
+.today b{color:var(--paper);display:block;font-size:15px}
+.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mode{border:0;border-radius:6px;padding:11px 13px;text-align:left;color:var(--ink);background:var(--paper);box-shadow:4px 4px 0 rgba(0,0,0,.35)}
+.mode b{display:block;font:400 17px/1.2 var(--f-display)}
+.mode small{display:block;font-size:12.5px;opacity:.75;line-height:1.35}
+.mode[aria-pressed="true"]{background:var(--pink);color:#fff;box-shadow:4px 4px 0 var(--sun)}
+.mode[aria-pressed="true"] small{opacity:.92}
+.main{display:grid;grid-template-columns:310px 1fr;gap:16px;flex:1;min-height:0}
+.board{display:flex;flex-direction:column;gap:14px}
+.note{background:var(--paper);color:var(--ink);border-radius:8px;padding:13px 14px;box-shadow:3px 3px 0 rgba(0,0,0,.35);position:relative}
+.note:before{content:"";position:absolute;top:-8px;left:50%;width:46px;height:16px;margin-left:-23px;background:rgba(63,224,197,.75);transform:rotate(-4deg)}
+.note h2{margin:0 0 8px;font:400 16px/1.2 var(--f-display);display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.note h2 small{font:700 12px var(--f-body);opacity:.6}
+.note ul{margin:0;padding-left:18px;font-size:13.5px}
+.focus{background:var(--sun)}
+.focus .step{font-weight:800;font-size:16px;line-height:1.35}
+.focus .meta{font-size:12.5px;opacity:.75;margin-top:4px}
+.focus .empty{font-size:13.5px}
+.focus .acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:8px 12px;font-weight:800;font-size:13px;background:var(--ink);color:var(--paper)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.timer{font:400 22px var(--f-display);font-variant-numeric:tabular-nums}
+.park{list-style:none;padding:0!important;display:flex;flex-direction:column;gap:6px}
+.park li{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;background:rgba(42,22,56,.06);border-radius:6px;padding:6px 8px}
+.park li button{margin-left:auto;border:0;background:transparent;color:var(--ink);font-weight:800;opacity:.5}
+.park .empty{background:transparent;opacity:.65;padding:0}
+.chat{background:var(--wall2);border:2px solid rgba(255,255,255,.08);border-radius:14px;display:flex;flex-direction:column;min-height:560px;overflow:hidden}
+.chat-top{padding:12px 16px;border-bottom:2px dashed rgba(255,255,255,.12)}
+.chat-top h1{margin:0;font:400 20px/1.2 var(--f-display);color:var(--sun)}
+.chat-top p{margin:2px 0 0;color:var(--soft);font-size:13px}
+.log{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.me{align-self:flex-end;max-width:min(620px,90%);background:var(--pink);color:#fff;padding:10px 14px;border-radius:14px 14px 4px 14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.card{align-self:flex-start;width:min(680px,100%);background:var(--paper);color:var(--ink);border-radius:14px 14px 14px 4px;overflow:hidden}
+.card .hd{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:2px dashed rgba(42,22,56,.15)}
+.card .hd .who{font:400 13px var(--f-display);color:var(--pink)}
+.card .hd h3{margin:0;font:800 15px var(--f-body);flex:1}
+.card .hd button{border:0;background:transparent;color:var(--ink);font-size:12.5px;font-weight:800;padding:3px 6px;border-radius:6px}
+.card .hd button:hover{background:rgba(42,22,56,.08)}
+.sec{padding:10px 14px;border-bottom:1px solid rgba(42,22,56,.08)}
+.sec:last-child{border-bottom:0}
+.lab{font:800 11px var(--f-body);letter-spacing:1.2px;text-transform:uppercase;opacity:.6;margin-bottom:4px}
+.now{background:rgba(255,210,63,.35)}
+.now .t{font-weight:800;font-size:15.5px}
+.todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.todo label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:4px 0}
+.todo input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--ok);flex:none}
+.todo input:checked+span{text-decoration:line-through;opacity:.55}
+.todo .n{font-weight:800;color:var(--pink);min-width:18px}
+.out{white-space:pre-wrap;background:rgba(42,22,56,.05);border-left:4px solid var(--mint);border-radius:0 8px 8px 0;padding:10px 12px;overflow-wrap:anywhere}
+.out-acts{display:flex;justify-content:flex-end;margin-top:6px}
+.parkline{font-size:13.5px;opacity:.8}
+.ask{font-weight:700}
+.plain{padding:12px 14px;white-space:pre-wrap}
+.wait .plain{opacity:.7}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 10px}
+.chip{border:2px solid var(--mint);background:transparent;color:var(--mint);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700}
+.chip:hover{background:var(--mint);color:var(--ink)}
+form{display:flex;gap:8px;padding:12px 16px 16px;border-top:2px dashed rgba(255,255,255,.12)}
+textarea{flex:1;resize:none;min-height:46px;max-height:160px;border-radius:12px;border:2px solid rgba(255,255,255,.18);background:var(--wall);color:var(--paper);padding:11px 12px;font:400 15px var(--f-body)}
+textarea::placeholder{color:var(--soft)}
+.send{border:0;border-radius:12px;background:var(--sun);color:var(--ink);font:400 16px var(--f-display);padding:0 18px;min-height:46px}
+.send:disabled{opacity:.5;cursor:wait}
+.mic{border:2px solid var(--soft);background:transparent;color:var(--paper);border-radius:12px;min-width:46px;min-height:46px;font-size:18px}
+.mic.on{border-color:var(--pink);background:var(--pink)}
+.foot{color:var(--soft);font-size:12.5px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.foot b{color:var(--paper)}
+@media (max-width:900px){.main{grid-template-columns:1fr}.modes{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.modes{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.main{grid-template-columns:1fr 310px}
+@media (max-width:900px){.main{grid-template-columns:1fr}}
+
+/* --- App-Ergänzungen: iPhone/Mac, Einstellungen, Installations-Hinweis --- */
+.wrap{padding-top:max(18px,env(safe-area-inset-top));padding-bottom:max(28px,env(safe-area-inset-bottom));
+  padding-left:max(16px,env(safe-area-inset-left),3vw);padding-right:max(16px,env(safe-area-inset-right),3vw)}
+textarea{font-size:16px}  /* verhindert das Hineinzoomen auf dem iPhone */
+.gear{border:2px solid rgba(255,255,255,.2);background:transparent;color:var(--paper);border-radius:12px;min-width:44px;min-height:44px;font-size:18px}
+.overlay{position:fixed;inset:0;background:rgba(20,10,28,.78);z-index:50;display:flex;align-items:flex-start;justify-content:center;overflow:auto;
+  padding:max(20px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom))}
+.overlay[hidden]{display:none}
+.panel{background:var(--paper);color:var(--ink);border-radius:16px;max-width:560px;width:100%;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:6px 6px 0 var(--pink)}
+.panel h2{margin:0;font:400 24px/1.2 var(--f-display);color:var(--pink)}
+.panel p{margin:0}
+.panel ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.panel a{color:#b8005e;font-weight:800}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld label{font-weight:800;font-size:14px}
+.fld input,.fld textarea{border:2px solid rgba(42,22,56,.25);border-radius:10px;padding:11px 12px;font:400 16px var(--f-body);background:#fff;color:var(--ink);min-height:46px}
+.fld small{opacity:.7;font-size:12.5px}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.big{border:0;border-radius:12px;background:var(--pink);color:#fff;font:400 17px var(--f-display);padding:12px 20px;min-height:48px}
+.big.sec2{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.msgline{font-weight:700;font-size:14px;min-height:1.2em}
+.msgline.bad{color:#c0003c}.msgline.good{color:#167a45}
+.install{background:var(--sun);color:var(--ink);border-radius:12px;padding:10px 14px;display:flex;gap:10px;align-items:center;font-size:14px;font-weight:700}
+.install[hidden]{display:none}
+.install button{margin-left:auto;border:0;background:transparent;font-size:18px;color:var(--ink)}
+.danger{color:#c0003c!important;border-color:#c0003c!important}
+@media (max-width:480px){.logo{font-size:28px}.demo{display:none}.today{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">Adris <span>Jarvis</span></div>
+    <div class="today"><b id="heute">–</b><span id="erledigt">Heute erledigt: 0</span></div>
+    <button type="button" class="gear" id="gear" aria-label="Einstellungen">⚙️</button>
+  </header>
+
+  <div class="install" id="install" hidden>
+    <span id="installText"></span>
+    <button type="button" id="installX" aria-label="Hinweis schließen">✕</button>
+  </div>
+
+  <div class="modes" role="group" aria-label="Wobei soll Jarvis helfen?">
+    <button type="button" class="mode" data-mode="sortieren" aria-pressed="true"><b>🧭 Sortier mich</b><small>Alles rauslassen, Jarvis macht Ordnung draus</small></button>
+    <button type="button" class="mode" data-mode="tag" aria-pressed="false"><b>📅 Mein Tag</b><small>Ein klarer Plan mit Pausen, ohne Überforderung</small></button>
+    <button type="button" class="mode" data-mode="content" aria-pressed="false"><b>💡 Content</b><small>Ideen, Hooks, Captions für deine Kanäle</small></button>
+    <button type="button" class="mode" data-mode="shop" aria-pressed="false"><b>🛍️ Casa Adriana</b><small>Produkttexte, Aktionen, was du pushen kannst</small></button>
+  </div>
+
+  <div class="main">
+    <section class="chat" aria-label="Mit Jarvis schreiben">
+      <div class="chat-top">
+        <h1 id="modeTitle">Sortier mich</h1>
+        <p id="modeHint"></p>
+      </div>
+      <div class="log" id="log" aria-live="polite"></div>
+      <div class="chips" id="chips"></div>
+      <form id="form">
+        <label for="input" class="sr">Nachricht an Jarvis</label>
+        <textarea id="input" rows="1" placeholder="Einfach drauflos schreiben …"></textarea>
+        <button type="button" class="mic" id="mic" hidden aria-label="Sprechen statt tippen">🎙️</button>
+        <button type="submit" class="send" id="send">Los</button>
+      </form>
+    </section>
+
+    <aside class="board" aria-label="Deine Ordnung">
+      <div class="note focus" aria-live="polite">
+        <h2>🎯 Jetzt dran <small>nur das eine</small></h2>
+        <div id="fokus"></div>
+      </div>
+      <div class="note">
+        <h2>🅿️ Gedanken-Parkplatz <small id="parkN">0</small></h2>
+        <ul class="park" id="park"></ul>
+      </div>
+      <div class="note">
+        <h2>Was Jarvis über dich weiß</h2>
+        <ul id="wissen">
+          <li><b>adri.chaos</b> · „my life is a Netflix show ✨“ · Stammtischbande</li>
+          <li>Instagram, TikTok (+ chaos.meme), Twitch, Patreon, Spotify</li>
+          <li>Casa Adriana: Kunst, Merch, Voice Messages, 1:1 Calls, Shop My Apartment</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <span>Deine Daten bleiben auf diesem Gerät. Nur deine Nachrichten gehen zum Antworten an Gemini (Google).</span>
+    <span id="status"></span>
+  </div>
+</div>
+
+<!-- Einrichtung / Einstellungen -->
+<div class="overlay" id="setup" hidden>
+  <form class="panel" id="setupForm">
+    <h2 id="setupTitle">Hey Adri ✨ Kurz einrichten</h2>
+    <p>Damit ich antworten kann, brauche ich einen kostenlosen Schlüssel von Google. Das dauert 2 Minuten und musst du nur einmal machen:</p>
+    <ol>
+      <li>Öffne <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> und melde dich mit deinem Google-Konto an.</li>
+      <li>Tipp auf <b>„API-Schlüssel erstellen“</b> (Create API key).</li>
+      <li>Kopier den Schlüssel und füg ihn hier ein.</li>
+    </ol>
+    <div class="fld">
+      <label for="key">Dein Gemini-Schlüssel</label>
+      <input id="key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="AIza…">
+      <small>Bleibt nur auf diesem Gerät gespeichert. Auf iPhone und Mac jeweils einmal eintragen.</small>
+    </div>
+    <div class="fld">
+      <label for="ueber">Was ich noch über dich wissen soll (optional)</label>
+      <textarea id="ueber" rows="3" placeholder="z. B. Ich bin abends am fittesten. Montags mache ich keine Streams. Erinnere mich ans Essen."></textarea>
+    </div>
+    <p style="margin:6px 0 0"><a href="./?versionen">🔄 Updates &amp; Versionen</a> – sehen, was es Neues gibt, oder zur alten Version zurück</p>
+    <div class="msgline" id="setupMsg" aria-live="polite"></div>
+    <div class="row">
+      <button type="button" class="big sec2 danger" id="reset" hidden>Alles zurücksetzen</button>
+      <button type="button" class="big sec2" id="setupClose" hidden>Abbrechen</button>
+      <button type="submit" class="big" id="setupSave">Testen &amp; speichern</button>
+    </div>
+  </form>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const L={get(k,d){try{const v=localStorage.getItem("aj-"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+         set(k,v){try{localStorage.setItem("aj-"+k,JSON.stringify(v))}catch(e){}}};
+const MODES={
+  sortieren:{title:"Sortier mich",hint:"Schreib einfach alles rein, was dich gerade beschäftigt, ungeordnet ist völlig okay.",
+    chips:["Mein Kopf ist voll, ich weiß nicht wo anfangen","Ich schieb was seit Tagen vor mir her","Hilf mir, eine Entscheidung zu treffen","Ich bin überfordert"],
+    start:{ueberschrift:"Hey, ich bin dein Jarvis ✨",text:"Mein Job: Ordnung in dein Chaos bringen, ohne dass du dich dafür anstrengen musst. Schreib mir einfach alles, was dir durch den Kopf geht, in einem Rutsch. Ich sortiere es, sag dir den einen nächsten Schritt und parke den Rest auf deinem Gedanken-Parkplatz, damit nichts verloren geht."}},
+  tag:{title:"Mein Tag",hint:"Ein klarer Plan: ein Hauptziel, höchstens drei Aufgaben, feste Pausen.",
+    chips:["Mach mir einen Plan für heute","Ich hab nur 2 Stunden Energie","Plan meinen Stream heute Abend","Was ist das absolute Minimum heute?"],
+    start:{ueberschrift:"Dein Tag, Schritt für Schritt",text:"Ich plane dir den Tag so, dass er machbar ist: ein Hauptziel, höchstens drei Aufgaben, Pausen inklusive. Sag mir kurz, was heute ansteht. Deinen Kalender lerne ich in einem späteren Update kennen."}},
+  content:{title:"Content",hint:"Ideen, Hooks und Captions, fertig zum Kopieren.",
+    chips:["5 TikTok-Ideen für diese Woche","Caption für ein Chaos-Morgenroutine-Reel","Hook für meinen nächsten Stream","Meme-Idee für chaos.meme"],
+    start:{ueberschrift:"Content in deinem Stil",text:"Sag mir ein Thema oder tipp unten auf einen Vorschlag. Du bekommst fertige Texte zum Kopieren und den einen Schritt, mit dem du sofort loslegen kannst."}},
+  shop:{title:"Casa Adriana",hint:"Produkttexte, Aktionen und was du gerade bewerben könntest.",
+    chips:["Produkttext für ein handbemaltes Unikat","Idee für eine Weihnachtsaktion","Wie bewerbe ich Voice Messages?","Story für Shop My Apartment"],
+    start:{ueberschrift:"Willkommen in der Casa ✨",text:"Ich helf dir mit Texten, Aktionen und Ideen für Kunst, Merch, Voice Messages, 1:1 Calls und Shop My Apartment. Was steht an?"}}
+};
+
+const ROLLE=`Du bist "Jarvis", der persönliche Assistent und Berater von Adriana (Adri). Sie hat viele Ideen und Projekte, Ordnung halten fällt ihr manchmal schwer. Deine wichtigste Aufgabe: ihr Struktur geben, sie an die Hand nehmen und sie beraten, ohne sie zu überfordern oder zu bevormunden.
+
+Was du über sie weißt:
+- Marke adri.chaos ("my life is a Netflix show ✨ adhd – a living meme – ceo – travelling – spirituality – diy"), Community "Stammtischbande".
+- Kanäle: Instagram (Hauptprofil), TikTok (Hauptprofil) + Meme-Kanal chaos.meme + TikTok-Gruppe "Join the chaos", Twitch (streamt gern bis spät nachts, gemütliches Zimmerstudio), Patreon ("exclusive chaos"), Spotify-Playlists.
+- Shop Casa Adriana: "Dinge, die man behält.", Handgemachtes vom Küchentisch, Versand aus Deutschland. Kunst (handbemalte Unikate, kleine Skulpturen), Merch (Hoodies, Sweats), Voice Messages, 1:1 Calls, "Shop My Apartment", Auftragsarbeiten. Dazu Vinted und eine Wunschliste. Ihr Universum heißt "Adriversum".
+
+Deine Regeln (immer):
+1. Ordnen statt Textwand. Jede Antwort hat dieselbe feste Struktur (siehe Format).
+2. Genau EIN nächster Schritt, so klein, dass er in unter 10 Minuten geht und sofort startbar ist ("Öffne die Notiz-App und schreib den Titel", nicht "Plane die Woche").
+3. Danach höchstens 3 weitere Schritte, in sinnvoller Reihenfolge, jeder konkret.
+4. Alles andere, das sie erwähnt hat, aber jetzt nicht dran ist, kommt auf den Parkplatz. Nichts geht verloren, nichts lenkt ab.
+5. Als Berater: Wenn eine Entscheidung ansteht, gib eine klare Empfehlung mit einem Satz Begründung statt nur Optionen aufzuzählen.
+6. Warm, locker, ein bisschen chaotisch-witzig wie sie, nie belehrend, kein Schämen ("du hättest schon längst"). Kurz. Emojis sparsam.
+7. Bei Überforderung: erst beruhigen (ein Satz), dann das Kleinste, was hilft. Pausen und Essen/Trinken mitdenken.
+8. Tagespläne: ein Hauptziel, max. 3 Aufgaben, Zeitblöcke mit Puffer und Pausen. Keine echten Termine erfinden: nutze nur, was sie sagt, oder klar als Beispiel markierte Termine.
+9. Erfinde keine Fakten, Zahlen oder Erfolge über sie.
+10. Was die App noch nicht kann (Dateien auf ihrem Mac, Kalender, Telegram, selbst posten): kurz sagen, dass das in einem späteren Update kommt, und trotzdem helfen.
+
+Format: Antworte NUR mit einem JSON-Objekt, ohne Text davor oder danach:
+{"ueberschrift": "max. 6 Wörter, worum es geht",
+ "beruhigung": "optional, ein Satz, nur wenn sie gestresst wirkt, sonst leer",
+ "jetzt": {"schritt": "der eine nächste Mini-Schritt", "minuten": Zahl 2 bis 10},
+ "danach": ["max. 3 konkrete Schritte"],
+ "inhalt": "optional: fertiger Text zum Kopieren (Captions, Hooks, Produkttexte, Tagesplan mit Uhrzeiten), sonst leer",
+ "empfehlung": "optional: deine klare Empfehlung als Berater, sonst leer",
+ "parkplatz": ["Dinge, die sie erwähnt hat, die aber jetzt nicht dran sind"],
+ "frage": "eine einzige kurze Rückfrage oder leer"}`;
+
+const MODELLE=["gemini-3.5-flash-lite","gemini-3.5-flash","gemini-flash-latest"];
+let mode="sortieren", busy=false, timer=null;
+const verlauf=L.get("verlauf",{sortieren:[],tag:[],content:[],shop:[]});
+let parkplatz=L.get("park",[]);
+const heuteKey=new Date().toDateString();
+let erledigt=(L.get("done",{})[heuteKey])||0;
+const speichern=()=>{L.set("park",parkplatz);L.set("done",{[heuteKey]:erledigt});
+  Object.keys(verlauf).forEach(k=>verlauf[k]=verlauf[k].slice(-30));L.set("verlauf",verlauf)};
+
+$("heute").textContent=new Date().toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
+const zeigeErledigt=()=>{$("erledigt").textContent="Heute erledigt: "+erledigt+(erledigt>=3?" 🔥":erledigt?" ✨":"")};
+zeigeErledigt();
+
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function renderPark(){
+  const ul=$("park");ul.innerHTML="";$("parkN").textContent=parkplatz.length;
+  if(!parkplatz.length){ul.appendChild(el("li","empty","Alles, was nicht jetzt dran ist, parkt Jarvis hier. Nichts geht verloren."));return}
+  parkplatz.forEach((p,i)=>{const li=el("li");li.appendChild(el("span","",p));
+    const b=el("button","","✕");b.type="button";b.setAttribute("aria-label","Vom Parkplatz nehmen: "+p);
+    b.onclick=()=>{parkplatz.splice(i,1);speichern();renderPark()};li.appendChild(b);ul.appendChild(li)});
+}
+function setFokus(j,merken=true){
+  clearInterval(timer);const f=$("fokus");f.innerHTML="";
+  if(merken)L.set("fokus",j||null);
+  if(!j||!j.schritt){f.appendChild(el("div","empty","Noch nichts. Schreib Jarvis, was in deinem Kopf los ist, dann steht hier dein nächster kleiner Schritt."));return}
+  f.appendChild(el("div","step",j.schritt));
+  const min=Math.max(1,Math.min(25,+j.minuten||5));f.appendChild(el("div","meta","Dauert etwa "+min+" Minuten"));
+  const acts=el("div","acts");const t=el("div","timer","");
+  const start=el("button","btn","⏱ Timer starten");start.type="button";const done=el("button","btn ghost","✅ Geschafft");done.type="button";
+  start.onclick=()=>{let s=min*60;clearInterval(timer);start.hidden=true;acts.prepend(t);
+    const tick=()=>{t.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+      if(s--<=0){clearInterval(timer);t.textContent="Zeit! Wie lief’s?";try{navigator.vibrate&&navigator.vibrate(300)}catch(e){}}};tick();timer=setInterval(tick,1000)};
+  done.onclick=()=>{clearInterval(timer);erledigt++;speichern();zeigeErledigt();L.set("fokus",null);f.innerHTML="";
+    f.appendChild(el("div","step","Stark. ✨ Ein Schritt geschafft."));f.appendChild(el("div","meta","Schreib Jarvis „weiter“, dann kommt der nächste."))};
+  acts.append(start,done);f.appendChild(acts);
+}
+function vorlesen(text){
+  try{if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="de-DE";
+    const v=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.startsWith("de"));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}
+}
+function karte(a,opts={}){
+  const c=el("div","card");const hd=el("div","hd");hd.appendChild(el("span","who","Jarvis"));hd.appendChild(el("h3","",a.ueberschrift||""));
+  const text=[a.beruhigung,a.jetzt&&a.jetzt.schritt,(a.danach||[]).join(". "),a.empfehlung,a.frage].filter(Boolean).join(". ");
+  if(!opts.start&&"speechSynthesis" in window){const b=el("button","","🔊 vorlesen");b.type="button";b.onclick=()=>vorlesen(text);hd.appendChild(b)}
+  c.appendChild(hd);
+  if(opts.start){c.appendChild(el("div","plain",a.text));return c}
+  if(a.beruhigung){const s=el("div","sec");s.appendChild(el("div","",a.beruhigung));c.appendChild(s)}
+  if(a.jetzt&&a.jetzt.schritt){const s=el("div","sec now");s.appendChild(el("div","lab","🎯 Jetzt als Erstes · ca. "+(a.jetzt.minuten||5)+" Min."));s.appendChild(el("div","t",a.jetzt.schritt));c.appendChild(s)}
+  if(a.danach&&a.danach.length){const s=el("div","sec");s.appendChild(el("div","lab","📋 Danach"));const ul=el("ul","todo");
+    a.danach.slice(0,3).forEach((d,i)=>{const li=el("li");const lb=el("label");const cb=el("input");cb.type="checkbox";
+      cb.onchange=()=>{erledigt=Math.max(0,erledigt+(cb.checked?1:-1));speichern();zeigeErledigt()};
+      const sp=el("span");sp.appendChild(el("span","n",(i+1)+"."));sp.append(" "+d);lb.append(cb,sp);li.appendChild(lb);ul.appendChild(li)});
+    s.appendChild(ul);c.appendChild(s)}
+  if(a.inhalt){const s=el("div","sec");s.appendChild(el("div","lab","📝 Fertig zum Kopieren"));s.appendChild(el("div","out",a.inhalt));
+    const r=el("div","out-acts");const k=el("button","btn","📋 Kopieren");k.type="button";
+    k.onclick=async()=>{try{await navigator.clipboard.writeText(a.inhalt);k.textContent="✓ Kopiert"}catch(e){k.textContent="Text lange drücken & kopieren"}setTimeout(()=>k.textContent="📋 Kopieren",1800)};
+    r.appendChild(k);s.appendChild(r);c.appendChild(s)}
+  if(a.empfehlung){const s=el("div","sec");s.appendChild(el("div","lab","💬 Mein Rat"));s.appendChild(el("div","",a.empfehlung));c.appendChild(s)}
+  if(a.parkplatz&&a.parkplatz.length){const s=el("div","sec");s.appendChild(el("div","lab","🅿️ Geparkt, nicht vergessen"));s.appendChild(el("div","parkline",a.parkplatz.join(" · ")));c.appendChild(s)}
+  if(a.frage){const s=el("div","sec");s.appendChild(el("div","ask",a.frage));c.appendChild(s)}
+  return c;
+}
+function anzeigen(node){$("log").appendChild(node);$("log").scrollTop=$("log").scrollHeight}
+function zeigeModus(m){
+  mode=m;L.set("mode",m);document.querySelectorAll(".mode").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===m));
+  $("modeTitle").textContent=MODES[m].title;$("modeHint").textContent=MODES[m].hint;
+  $("log").innerHTML="";anzeigen(karte(MODES[m].start,{start:true}));
+  verlauf[m].forEach(x=>anzeigen(x.role==="user"?el("div","me",x.content):karte(x.antwort||lesen(x.content)||{ueberschrift:"",inhalt:x.content})));
+  $("chips").innerHTML="";MODES[m].chips.forEach(c=>{const b=el("button","chip",c);b.type="button";b.onclick=()=>senden(c);$("chips").appendChild(b)});
+}
+function lesen(txt){
+  const m=(txt||"").match(/\{[\s\S]*\}/);if(!m)return null;
+  try{const a=JSON.parse(m[0]);a.danach=Array.isArray(a.danach)?a.danach:[];a.parkplatz=Array.isArray(a.parkplatz)?a.parkplatz:[];return a}catch(e){return null}
+}
+function systemText(){
+  const ueber=L.get("ueber","");
+  return ROLLE+"\n\nAktueller Bereich: "+MODES[mode].title+". Heute ist "+$("heute").textContent+", "+new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})+" Uhr."+
+    "\nAuf ihrem Gedanken-Parkplatz liegt gerade: "+(parkplatz.join("; ")||"nichts")+"."+
+    (ueber?"\nDas hat Adri dir selbst über sich gesagt: "+ueber:"");
+}
+async function gemini(contents,key){
+  let letzter="";
+  for(const m of [L.get("modell",""),...MODELLE].filter((x,i,a)=>x&&a.indexOf(x)===i)){
+    try{
+      const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent?key="+encodeURIComponent(key),{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({systemInstruction:{parts:[{text:systemText()}]},contents,
+          generationConfig:{temperature:0.8,responseMimeType:"application/json"}})});
+      const d=await r.json().catch(()=>({}));
+      if(r.ok){const t=(((d.candidates||[])[0]||{}).content||{}).parts;if(t&&t.length){L.set("modell",m);return t.map(p=>p.text||"").join("")}letzter="leere Antwort";continue}
+      letzter=(d.error&&d.error.message)||("Fehler "+r.status);
+      if(r.status===400&&/API key/i.test(letzter))throw new Error("SCHLUESSEL");
+      if(r.status===403)throw new Error("SCHLUESSEL");
+      if(r.status===429)throw new Error("LIMIT");
+    }catch(e){if(e.message==="SCHLUESSEL"||e.message==="LIMIT")throw e;letzter=e.message||String(e)}
+  }
+  throw new Error(letzter||"keine Verbindung");
+}
+async function senden(text){
+  text=(text||"").trim();if(!text||busy)return;
+  const key=L.get("key","");if(!key){oeffneSetup(true);return}
+  busy=true;$("send").disabled=true;$("input").value="";$("input").style.height="auto";
+  anzeigen(el("div","me",text));verlauf[mode].push({role:"user",content:text});speichern();
+  const warten=el("div","card wait");warten.appendChild(el("div","plain","Ich sortiere das gerade für dich …"));anzeigen(warten);
+  const contents=verlauf[mode].slice(-14).map(x=>({role:x.role==="user"?"user":"model",parts:[{text:x.content}]}));
+  try{
+    const roh=await gemini(contents,key);
+    const a=lesen(roh)||{ueberschrift:"Hier meine Antwort",danach:[],parkplatz:[],inhalt:roh};
+    warten.replaceWith(karte(a));
+    verlauf[mode].push({role:"assistant",content:JSON.stringify(a),antwort:a});
+    setFokus(a.jetzt);(a.parkplatz||[]).forEach(p=>{if(p&&!parkplatz.includes(p))parkplatz.push(p)});speichern();renderPark();
+    $("status").textContent="";
+  }catch(e){
+    verlauf[mode].pop();speichern();
+    const msg=e.message==="SCHLUESSEL"?"Dein Gemini-Schlüssel funktioniert nicht. Tipp oben auf ⚙️ und trag ihn neu ein."
+      :e.message==="LIMIT"?"Kurz durchatmen, Google bremst gerade (zu viele Anfragen). Versuch’s in einer Minute nochmal."
+      :navigator.onLine===false?"Du bist gerade offline. Sobald du Internet hast, kann ich wieder antworten."
+      :"Da ist was schiefgelaufen ("+String(e.message).slice(0,120)+"). Versuch’s gleich nochmal.";
+    warten.replaceWith(karte({ueberschrift:"Hat nicht geklappt",beruhigung:msg,danach:[],parkplatz:[]}));
+    $("input").value=text;
+  }
+  busy=false;$("send").disabled=false;
+}
+
+/* Einrichtung */
+function oeffneSetup(erst){
+  $("setupTitle").textContent=erst?"Hey Adri ✨ Kurz einrichten":"Einstellungen";
+  $("key").value="";$("key").placeholder=L.get("key","")?"gespeichert – leer lassen zum Behalten":"AIza…";
+  $("ueber").value=L.get("ueber","");$("setupMsg").textContent="";$("setupMsg").className="msgline";
+  $("setupClose").hidden=!L.get("key","");$("reset").hidden=!L.get("key","");$("setup").hidden=false;
+}
+$("gear").onclick=()=>oeffneSetup(false);
+$("setupClose").onclick=()=>{$("setup").hidden=true};
+$("reset").onclick=()=>{
+  if($("reset").dataset.sicher!=="1"){$("reset").dataset.sicher="1";$("reset").textContent="Wirklich? Nochmal tippen";return}
+  try{Object.keys(localStorage).filter(k=>k.startsWith("aj-")).forEach(k=>localStorage.removeItem(k))}catch(e){}
+  location.reload();
+};
+$("setupForm").addEventListener("submit",async e=>{
+  e.preventDefault();const neu=$("key").value.trim();const key=neu||L.get("key","");
+  L.set("ueber",$("ueber").value.trim());
+  if(!key){$("setupMsg").className="msgline bad";$("setupMsg").textContent="Bitte füg zuerst deinen Schlüssel ein.";return}
+  $("setupSave").disabled=true;$("setupMsg").className="msgline";$("setupMsg").textContent="Ich teste den Schlüssel …";
+  try{
+    await gemini([{role:"user",parts:[{text:'Test. Antworte nur mit {"ueberschrift":"ok"}'}]}],key);
+    L.set("key",key);$("setupMsg").className="msgline good";$("setupMsg").textContent="Klappt! ✨ Ich bin startklar.";
+    setTimeout(()=>{$("setup").hidden=true},900);$("status").textContent="";
+  }catch(err){
+    $("setupMsg").className="msgline bad";
+    $("setupMsg").textContent=err.message==="SCHLUESSEL"?"Der Schlüssel passt nicht. Kopier ihn bitte nochmal komplett aus AI Studio."
+      :err.message==="LIMIT"?"Schlüssel ok, aber Google bremst gerade. In einer Minute klappt es."
+      :"Keine Verbindung zu Google ("+String(err.message).slice(0,100)+").";
+    if(err.message==="LIMIT")L.set("key",key);
+  }
+  $("setupSave").disabled=false;
+});
+
+/* Sprechen statt tippen (iPhone & Mac: Safari-Spracherkennung) */
+(function(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;
+  const rec=new SR();rec.lang="de-DE";rec.interimResults=true;rec.continuous=false;let base="",an=false;
+  $("mic").hidden=false;
+  rec.onresult=e=>{let t="";for(const r of e.results)t+=r[0].transcript;$("input").value=base+t};
+  rec.onend=()=>{an=false;$("mic").classList.remove("on")};
+  rec.onerror=()=>{an=false;$("mic").classList.remove("on")};
+  $("mic").onclick=()=>{if(an){rec.stop();return}base=$("input").value?$("input").value+" ":"";try{rec.start();an=true;$("mic").classList.add("on")}catch(e){}};
+})();
+
+/* Installations-Hinweis für iPhone & Mac */
+(function(){
+  const standalone=window.navigator.standalone||matchMedia("(display-mode: standalone)").matches;
+  if(standalone||L.get("installX",false))return;
+  const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  const mac=/Macintosh/.test(navigator.userAgent)&&!ios;
+  const t=ios?"📲 Als App installieren: unten auf Teilen ⬆️ tippen → „Zum Home-Bildschirm“."
+    :mac?"💻 Als App installieren: in Safari oben Ablage → „Zum Dock hinzufügen“."
+    :"📲 Tipp: Im Browser-Menü „App installieren“ wählen, dann hast du Jarvis als eigene App.";
+  $("installText").textContent=t;$("install").hidden=false;
+  $("installX").onclick=()=>{$("install").hidden=true;L.set("installX",true)};
+})();
+
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>zeigeModus(b.dataset.mode));
+$("form").addEventListener("submit",e=>{e.preventDefault();senden($("input").value)});
+$("input").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!/iPhone|iPad/.test(navigator.userAgent)){e.preventDefault();senden($("input").value)}});
+$("input").addEventListener("input",e=>{e.target.style.height="auto";e.target.style.height=Math.min(160,e.target.scrollHeight)+"px"});
+renderPark();setFokus(L.get("fokus",null),false);zeigeModus(L.get("mode","sortieren"));
+if(!L.get("key",""))oeffneSetup(true);
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>

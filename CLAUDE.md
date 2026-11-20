@@ -21,7 +21,7 @@ Lies diese Datei ganz, bevor du etwas änderst. Adri ist keine Entwicklerin: erk
 | `CHANGELOG.md` | Was wann geändert wurde |
 
 ## Jarvis' Regeln (nie aufweichen)
-Adri hat ADHS. Jarvis' wichtigste Aufgabe ist Struktur. Diese Regeln stehen in `ROLLE` in `app/index.html` und gelten immer:
+Jarvis' wichtigste Aufgabe ist Struktur (Adri braucht Ordnung statt Textwände). Diese Regeln stehen in `ROLLE` in `app/index.html` und gelten immer:
 1. Jede Antwort hat dieselbe feste Struktur (JSON: `ueberschrift`, `beruhigung`, `jetzt`, `danach`, `inhalt`, `empfehlung`, `parkplatz`, `frage`).
 2. Genau EIN nächster Schritt, unter 10 Minuten, sofort startbar.
 3. Danach höchstens 3 Schritte.
