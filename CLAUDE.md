@@ -12,7 +12,9 @@ Lies diese Datei ganz, bevor du etwas änderst. Adri ist keine Entwicklerin: erk
 | Datei | Wofür |
 |---|---|
 | `index.html` | Startseite für Adri (Willkommen, Download-Knöpfe für MacBook und iPhone) |
-| `app/index.html` | Die ganze App: Aussehen (CSS), Inhalt und Logik (JavaScript) in einer Datei |
+| `app/index.html` | Der „Lader“: startet die Version, die Adri angenommen hat, und zeigt neue Updates NUR beim Öffnen an (Infoseite + Annehmen/Ablehnen). Selten ändern. |
+| `app/v/<nummer>/index.html` | Die eigentliche App in dieser Version: Aussehen (CSS), Inhalt und Logik (JavaScript) in einer Datei |
+| `app/updates.json` | Liste aller Versionen mit Infos für Adri (was neu, Vorteile, Nachteile, was bleibt) |
 | `app/manifest.webmanifest` | Name, Farben und Symbol der App |
 | `app/sw.js` | Hält die App offline startbar. Bei jeder Änderung `CACHE` hochzählen (`adri-jarvis-v1` → `v2` …) |
 | `app/icon-*.png` | App-Symbole |
@@ -33,15 +35,26 @@ Neue Funktionen müssen zu diesen Regeln passen. Wenn ein Wunsch dagegen geht (z
 
 ## Was nie kaputtgehen darf
 - Die Einrichtung (Schlüssel eintragen, testen, speichern) und das Zahnrad.
-- Gespeicherte Daten: alle Schlüssel in localStorage beginnen mit `aj-` (`aj-key`, `aj-park`, `aj-verlauf`, `aj-done`, `aj-fokus`, `aj-ueber`, `aj-mode`, `aj-modell`). Nie umbenennen oder löschen, sonst verliert Adri ihren Parkplatz und Verlauf.
+- Gespeicherte Daten: alle Schlüssel in localStorage beginnen mit `aj-` (`aj-key`, `aj-park`, `aj-verlauf`, `aj-done`, `aj-fokus`, `aj-ueber`, `aj-mode`, `aj-modell`, `aj-version`, `aj-version-naechste`, `aj-update-nein`). Nie umbenennen oder löschen, sonst verliert Adri ihren Parkplatz und Verlauf.
 - Das Antwortformat (JSON). `lesen()` und `karte()` hängen davon ab.
 - Datenschutz: keine Schlüssel, Passwörter oder privaten Daten ins Repo. Keine Daten an andere Server als Google Gemini schicken.
 - iPhone: Schriftgröße in Eingabefeldern mindestens 16px (sonst zoomt Safari), `env(safe-area-inset-*)` beachten.
 
+## Updates: Adri entscheidet (wichtig!)
+Adri arbeitet in Projekten und will nicht, dass mitten drin etwas geändert oder ersetzt wird. Darum:
+- Eine bestehende Version (`app/v/<n>/`) wird **nie** verändert. Jede Änderung wird eine **neue Version**:
+  `app/v/<n>/` nach `app/v/<n+1>/` kopieren, dort ändern.
+- In `app/updates.json` einen Eintrag ergänzen: `v`, `datum`, `titel`, `von`, `dauer` (optional) und in einfachen, ehrlichen Worten
+  `neu` (was ist neu), `vorteile`, `nachteile` (auch kleine: z. B. „Knopf sitzt jetzt woanders“), `bleibt` (was sich nicht ändert).
+- Die App zeigt das Update nur **beim Öffnen**, nie während der Arbeit. Adri kann: beim nächsten Öffnen annehmen, sofort annehmen,
+  später entscheiden oder ablehnen. Unter Zahnrad → „Updates & Versionen“ kann sie jederzeit zurück zu einer alten Version.
+- Ihre Daten (`aj-…`) müssen in jeder Version weiter funktionieren. Nichts umbenennen, nichts löschen.
+- Max' Jarvis darf Updates nur nach Max' Freigabe vorschlagen – annehmen tut immer Adri.
+
 ## So arbeitest du
 1. Vor jeder Änderung den neuesten Stand holen.
 2. Klein ändern, eine Sache auf einmal.
-3. Testen: `app/index.html` im Browser öffnen, einmal schmal (iPhone, ca. 390 px) und einmal breit (MacBook) ansehen. Prüfen: Einrichtung, eine Antwort, Parkplatz, "Geschafft".
+3. Testen: `app/` im Browser öffnen (Lader + neue Version), einmal schmal (iPhone, ca. 390 px) und einmal breit (MacBook) ansehen. Prüfen: Einrichtung, eine Antwort, Parkplatz, "Geschafft".
 4. In `app/sw.js` die `CACHE`-Version hochzählen.
 5. Eine Zeile in `CHANGELOG.md` oben ergänzen: Datum · was · warum.
 6. Hochladen (commit + push auf `main`) mit einer verständlichen Nachricht.

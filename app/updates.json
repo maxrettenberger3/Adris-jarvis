@@ -1,0 +1,12 @@
+{
+  "hinweis": "Liste aller Versionen von Adris Jarvis. Neue Version = neuer Ordner app/v/<nummer>/ + neuer Eintrag hier. Alte Ordner nie ändern.",
+  "versionen": [
+    {
+      "v": 1,
+      "datum": "19.11.2026",
+      "titel": "Dein erster Jarvis",
+      "von": "Max",
+      "neu": ["Sortier mich, Mein Tag, Content und Casa Adriana", "Gedanken-Parkplatz, Jetzt-dran-Timer und Geschafft-Zähler"]
+    }
+  ]
+}
