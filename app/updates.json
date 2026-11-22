@@ -29,6 +29,30 @@
       "bleibt": [
         "Alle Modi, dein Gedanken-Parkplatz, dein Verlauf, dein Schlüssel und Jarvis' feste Struktur."
       ]
+    },
+    {
+      "v": 3,
+      "datum": "23.11.2026",
+      "titel": "Jarvis kennt dein Adriversum",
+      "von": "Max",
+      "dauer": "sofort",
+      "neu": [
+        "Unter ⚙️ gibt es „📂 Datei laden“: Dort lädst du die JSON-Datei aus deinem Adriversum.",
+        "Danach kennt Jarvis deine Projekte, nächsten Schritte und offenen Aufgaben und plant damit, z. B. bei „Mein Tag“."
+      ],
+      "vorteile": [
+        "Du musst Jarvis nicht mehr erklären, woran du gerade arbeitest.",
+        "Er nennt deine Projekte genau so, wie sie im Adriversum heißen, und erfindet nichts dazu."
+      ],
+      "nachteile": [
+        "Der Stand aktualisiert sich nicht von selbst: Für einen neuen Stand lädst du die Datei einfach neu (überschreibt den alten).",
+        "Wenn geladen, geht der Stand beim Antworten mit an Gemini (Google), genau wie deine Nachrichten.",
+        "In den Einstellungen gibt es ein Feld mehr."
+      ],
+      "bleibt": [
+        "Alle Modi, dein Gedanken-Parkplatz, dein Verlauf, dein Schlüssel und Jarvis' feste Struktur.",
+        "Die Datei bleibt nur auf deinem Gerät – nichts davon liegt im Internet."
+      ]
     }
   ]
 }

@@ -35,9 +35,9 @@ Neue Funktionen müssen zu diesen Regeln passen. Wenn ein Wunsch dagegen geht (z
 
 ## Was nie kaputtgehen darf
 - Die Einrichtung (Schlüssel eintragen, testen, speichern) und das Zahnrad.
-- Gespeicherte Daten: alle Schlüssel in localStorage beginnen mit `aj-` (`aj-key`, `aj-park`, `aj-verlauf`, `aj-done`, `aj-fokus`, `aj-ueber`, `aj-mode`, `aj-modell`, `aj-version`, `aj-version-naechste`, `aj-update-nein`). Nie umbenennen oder löschen, sonst verliert Adri ihren Parkplatz und Verlauf.
+- Gespeicherte Daten: alle Schlüssel in localStorage beginnen mit `aj-` (`aj-key`, `aj-park`, `aj-verlauf`, `aj-done`, `aj-fokus`, `aj-ueber`, `aj-mode`, `aj-modell`, `aj-version`, `aj-version-naechste`, `aj-update-nein`, `aj-adriversum`). Nie umbenennen oder löschen, sonst verliert Adri ihren Parkplatz und Verlauf.
 - Das Antwortformat (JSON). `lesen()` und `karte()` hängen davon ab.
-- Datenschutz: keine Schlüssel, Passwörter oder privaten Daten ins Repo. Keine Daten an andere Server als Google Gemini schicken.
+- Datenschutz: keine Schlüssel, Passwörter oder privaten Daten ins Repo. Das Repo ist öffentlich (GitHub Pages): Adriversum-Exporte o. Ä. NIE ins Repo legen, sondern in der App laden (`aj-adriversum`, nur auf dem Gerät). Keine Daten an andere Server als Google Gemini schicken.
 - iPhone: Schriftgröße in Eingabefeldern mindestens 16px (sonst zoomt Safari), `env(safe-area-inset-*)` beachten.
 
 ## Updates: Adri entscheidet (wichtig!)
