@@ -1,5 +1,6 @@
 # Änderungen
 
+- 2026-11-25 · Version 4: Karte „Adriversum heute“ (3 Aufgaben + 3 Projekte, Rest aufklappbar, Antippen = Jarvis hilft) · Adri wollte ihren Stand in der App sehen; ZIP „Plan C“ nicht übernommen, weil sie den Lader überschrieben hätte
 - 2026-11-23 · Version 3: Adriversum-Stand (JSON) unter ⚙️ laden, Jarvis nutzt Projekte und Aufgaben als Kontext; Datei bleibt nur auf dem Gerät (aj-adriversum), nicht im öffentlichen Repo · Adris Wunsch über Max
 - 2026-11-21 · Version 2: Formulierung in Jarvis’ Anweisung und in der CLAUDE.md angepasst, Regeln und Verhalten unverändert · Adris Wunsch
 - 2026-11-20 · Update-System: Updates erscheinen nur beim Öffnen der App mit Infoseite (neu, Vorteile, Nachteile, was bleibt) – Adri nimmt an oder lehnt ab, Zurückwechseln jederzeit · damit nichts mitten in ihrer Arbeit geändert wird

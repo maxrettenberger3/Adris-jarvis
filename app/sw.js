@@ -1,6 +1,6 @@
 // Adris Jarvis – hält die App offline startbar. KI-Anfragen gehen immer live raus.
-const CACHE = "adri-jarvis-v4";
-const DATEIEN = ["./", "./index.html", "./v/1/index.html", "./v/2/index.html", "./v/3/index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
+const CACHE = "adri-jarvis-v5";
+const DATEIEN = ["./", "./index.html", "./v/1/index.html", "./v/2/index.html", "./v/3/index.html", "./v/4/index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(DATEIEN)).then(() => self.skipWaiting()));

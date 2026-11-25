@@ -53,6 +53,29 @@
         "Alle Modi, dein Gedanken-Parkplatz, dein Verlauf, dein Schlüssel und Jarvis' feste Struktur.",
         "Die Datei bleibt nur auf deinem Gerät – nichts davon liegt im Internet."
       ]
+    },
+    {
+      "v": 4,
+      "datum": "25.11.2026",
+      "titel": "Dein Adriversum auf einen Blick",
+      "von": "Max",
+      "dauer": "sofort",
+      "neu": [
+        "Rechts gibt es eine neue Karte „Adriversum heute“: die 3 nächsten Aufgaben und 3 aktive Projekte mit ihrem nächsten Schritt.",
+        "Tippst du auf eine Aufgabe oder ein Projekt, hilft dir Jarvis direkt genau damit.",
+        "„Alle anzeigen“ klappt den Rest auf, wenn du doch alles sehen willst."
+      ],
+      "vorteile": [
+        "Du siehst sofort, was als Nächstes dran ist, ohne die ganze Liste.",
+        "Ein Tipp reicht, und Jarvis zerlegt die Aufgabe in einen kleinen ersten Schritt."
+      ],
+      "nachteile": [
+        "Die Karte zeigt nur den Stand aus deiner zuletzt geladenen Datei. Für einen neuen Stand: ⚙️ → „Datei laden“.",
+        "Die rechte Spalte ist etwas länger (auf dem iPhone: weiter unten scrollen)."
+      ],
+      "bleibt": [
+        "Alle Modi, dein Gedanken-Parkplatz, dein Verlauf, dein Schlüssel, dein geladener Adriversum-Stand und Jarvis' feste Struktur."
+      ]
     }
   ]
 }
